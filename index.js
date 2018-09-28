@@ -4,30 +4,35 @@ const chalk    = require('chalk');
 const mkpath   = require('mkpath');
 const { dump } = require('dumper.js');
 
-// create a dump folder
-if (!fs.existsSync(dump_folder)){
-    fs.mkdirSync(dump_folder);
-}
 
-// signale configuration options
-signale.config({
-    displayFilename : false,
-    displayTimestamp: true,
-    displayDate     : false
-}); 
 
 const settings = {
     data: {
-        dump_folder: '.dump'
+        dump_folder: '.dump',
+        signale    : {
+            displayFilename : false,
+            displayTimestamp: true,
+            displayDate     : false
+        }
     },
     get(key){
         return this.data[key];
     },
     set(obj){
         Object.assign(this.data, obj);
+        signale.config({
+            ...this.data.signale
+        }); 
     }
 };
 
+if (!fs.existsSync(settings.data.dump_folder)){
+    fs.mkdirSync(settings.data.dump_folder);
+}
+
+signale.config({
+    ...settings.data.signale
+}); 
 // current date
 const time_str = () => {
     var time = new Date();
@@ -36,6 +41,7 @@ const time_str = () => {
 
 // recursive print
 const print = (str, ...args) => {
+  
     if(str){
         if(str === 'dump'){
             dump(...args);

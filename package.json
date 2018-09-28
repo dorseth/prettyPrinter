@@ -1,5 +1,5 @@
 {
-  "name": "pretty_printer",
+  "name": "oprinter",
   "version": "0.0.1",
   "description": "Print variables and write them to files",
   "main": "index.js",
